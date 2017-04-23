@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/fillproduct_width"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/fillproduct_culomn_height"
+        android:textStyle="bold"
+        android:text="@string/fillproduct_title_main"
+        android:textSize="@dimen/main_title_textsize"/>
+
+    <AutoCompleteTextView
+        android:id="@+id/fillproduct_name_edittext"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/fillproduct_culomn_height"
+        android:layout_marginEnd="@dimen/main_side_margin"
+        android:layout_marginLeft="@dimen/main_side_margin"
+        android:layout_marginRight="@dimen/main_side_margin"
+        android:layout_marginStart="@dimen/main_side_margin"
+        android:layout_marginTop="@dimen/main_normal_margin"
+        android:completionThreshold="1"
+        android:hint="@string/fillproduct_title" />
+
+    <EditText
+        android:id="@+id/fillproduct_no_edittext"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/fillproduct_culomn_height"
+        android:layout_marginEnd="@dimen/main_side_margin"
+        android:layout_marginLeft="@dimen/main_side_margin"
+        android:layout_marginRight="@dimen/main_side_margin"
+        android:layout_marginStart="@dimen/main_side_margin"
+        android:layout_marginTop="@dimen/main_normal_margin"
+        android:hint="@string/fillproduct_no"
+        android:inputType="number" />
+
+    <AutoCompleteTextView
+        android:id="@+id/fillproduct_unit_edittext"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/fillproduct_culomn_height"
+        android:layout_marginEnd="@dimen/main_side_margin"
+        android:layout_marginLeft="@dimen/main_side_margin"
+        android:layout_marginRight="@dimen/main_side_margin"
+        android:layout_marginStart="@dimen/main_side_margin"
+        android:layout_marginTop="@dimen/main_normal_margin"
+        android:completionThreshold="1"
+        android:hint="@string/fillproduct_unit" />
+
+    <EditText
+        android:id="@+id/fillproduct_fee_edittext"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/fillproduct_culomn_height"
+        android:layout_marginEnd="@dimen/main_side_margin"
+        android:layout_marginLeft="@dimen/main_side_margin"
+        android:layout_marginRight="@dimen/main_side_margin"
+        android:layout_marginStart="@dimen/main_side_margin"
+        android:layout_marginTop="@dimen/main_normal_margin"
+        android:hint="@string/fillproduct_fee"
+        android:inputType="number" />
+
+    <TextView
+        android:id="@+id/fillproduct_totalcost_textview"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/fillproduct_culomn_height"
+        android:layout_marginTop="@dimen/main_normal_margin"
+        android:text="@string/fillproduct_totalcost"
+        android:textAlignment="center"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/fillproduct_culomn_height"
+        android:layout_gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/fillproduct_ok"
+            android:layout_width="@dimen/fillproduct_button_width"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="@dimen/main_side_margin"
+            android:layout_marginLeft="@dimen/main_side_margin"
+            android:layout_marginRight="@dimen/main_side_margin"
+            android:layout_marginStart="@dimen/main_side_margin"
+            android:text="@string/fillproduct_ok" />
+
+        <Button
+            android:id="@+id/fillproduct_delete"
+            android:layout_width="@dimen/fillproduct_button_width"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="@dimen/main_side_margin"
+            android:layout_marginLeft="@dimen/main_side_margin"
+            android:layout_marginRight="@dimen/main_side_margin"
+            android:layout_marginStart="@dimen/main_side_margin"
+            android:text="@string/fillproduct_remove" />
+
+    </LinearLayout>
+</LinearLayout>
