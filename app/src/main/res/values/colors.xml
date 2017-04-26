@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#22BAC6</color>
-    <color name="colorPrimaryDark">#28A30A</color>
+    <color name="colorPrimaryDark">#28a30a</color>
     <color name="colorAccent">#22BAC6</color>
     <color name="mdtp_accent_color">#22BAC6</color>
     <color name="mdtp_accent_color_dark">#28A30A</color>
     <color name="black_overlay">#66000000</color>
+    <color name="background">#ffffff</color>
 </resources>

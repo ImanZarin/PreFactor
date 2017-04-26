@@ -1,6 +1,9 @@
 package com.skywavestudios.prefactor;
 
 
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+
 import java.text.DecimalFormat;
 
 /**
@@ -14,5 +17,16 @@ public class AppConstant {
         return yourFormattedString;
     }
 
+    public static Cursor getAllFactors(SQLiteDatabase mDB) {
+        return mDB.query(
+                FactorsContract.FactorsEntry.TABLE_NAME,
+                null,
+                null,
+                null,
+                null,
+                null,
+                FactorsContract.FactorsEntry.COLUMN_DATE + " DESC"
+        );
 
+    }
 }

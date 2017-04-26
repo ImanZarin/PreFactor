@@ -30,6 +30,7 @@ public class ShowFactorActivity extends AppActivity {
     TextView mcustomer;
     TextView mtotal;
     TextView mtotalString;
+    TextView mdescription;
     TextView mTable[][] = new TextView[11][6];
     TableLayout products_table;
     private int totalCost = 0;
@@ -50,6 +51,7 @@ public class ShowFactorActivity extends AppActivity {
         mtotal = (TextView) findViewById(R.id.image_total_no);
         mtotalString = (TextView) findViewById(R.id.image_total_string);
         products_table = (TableLayout) findViewById(R.id.image_factor_products_table);
+        mdescription = (TextView) findViewById(R.id.image_description);
 
 
     }
@@ -64,7 +66,8 @@ public class ShowFactorActivity extends AppActivity {
         mcustomer.setText(mfactor.Customer);
         draw_table();
         mtotal.setText(AppConstant.Int_To_Price(totalCost));
-        mtotalString.setText(Persian_Number_To_String.GET_Number_To_PersianString(String.valueOf(totalCost)));
+        mtotalString.setText(Persian_Number_To_String.GET_Number_To_PersianString(String.valueOf(totalCost)) + getString(R.string.currency));
+        mdescription.setText(mfactor.Description);
     }
 
     public void draw_table() {

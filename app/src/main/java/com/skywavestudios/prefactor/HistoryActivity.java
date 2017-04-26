@@ -10,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.MenuItem;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -27,9 +28,7 @@ public class HistoryActivity extends AppActivity implements History_Adaptor.RowC
     History_Adaptor adaptor;
     RecyclerView recyclerView;
     AutoCompleteTextView mSearch;
-    //    final int itemToshow;
     LinearLayoutManager layoutManager;
-    ArrayList<Factor> list;
     private SQLiteDatabase mDB;
     Cursor mCursor;
     private final History_Adaptor.RowClickListener _RowListener = this;
@@ -51,7 +50,7 @@ public class HistoryActivity extends AppActivity implements History_Adaptor.RowC
         //
         FactorDBHelper dbHelper = new FactorDBHelper(this);
         mDB = dbHelper.getWritableDatabase();
-        mCursor = getAllFactors();
+        mCursor = AppConstant.getAllFactors(mDB);
         //
 //        Gson gson = new Gson();
         SharedPreferences sp;
@@ -98,20 +97,20 @@ public class HistoryActivity extends AppActivity implements History_Adaptor.RowC
     public void onBackPressed() {
         Intent i = new Intent(this, MainActivity.class);
         startActivity(i);
+        finish();
     }
 
-    private Cursor getAllFactors() {
-        return mDB.query(
-                FactorsContract.FactorsEntry.TABLE_NAME,
-                null,
-                null,
-                null,
-                null,
-                null,
-                FactorsContract.FactorsEntry.COLUMN_DATE + " DESC"
-        );
-
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                break;
+        }
+        return true;
     }
+
+
 
     private Cursor _get_OneCustomer_Factors(String customerName) {
         String columnCondition = FactorsContract.FactorsEntry.COLUMN_CUSTOMER + " LIKE ?";

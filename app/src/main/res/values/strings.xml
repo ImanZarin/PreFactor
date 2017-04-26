@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">PreFactor</string>
+    <string name="app_name">پیش فاکتور</string>
     <string name="main_title">پیش فاکتور</string>
     <string name="main_factorno">شماره فاکتور</string>
     <string name="main_customer">مشتری</string>
@@ -24,7 +24,7 @@
     <string name="fillproduct_ok">تایید</string>
     <string name="fillproduct_remove">حذف</string>
     <string name="fillproduct_title_main">محصول را تعریف کنید</string>
-    <string name="title_activity_history">HistoryActivity</string>
+    <string name="title_activity_history">لیست فاکتورها</string>
     <string name="large_text">
         "Material is the metaphor.\n\n"
 
@@ -115,7 +115,13 @@
         "when a user tries to pick up one of cards.\n\n"
     </string>
 
-    <string name="title_activity_show_factor">ShowFactorActivity</string>
+    <string name="title_activity_show_factor">عکس فاکتور</string>
+    <string name="actionbar_history">لیست فاکتورها</string>
+    <string name="actionbar_save_share">ذخیره و ارسال</string>
+    <string name="currency">ریال</string>
+    <string name="repeted_factor_no">شماره فاکتور تکراری است، آیا میخواهید ادامه دهید؟</string>
+    <string name="yes">بلی</string>
+    <string name="no">خیر</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
 </resources>

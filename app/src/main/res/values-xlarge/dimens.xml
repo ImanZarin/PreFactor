@@ -1,2 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <dimen name="text_margin">16dp</dimen>
+    <dimen name="main_side_margin">20dp</dimen>
+    <dimen name="main_title_height">30dp</dimen>
+    <dimen name="main_normal_margin">10dp</dimen>
+    <dimen name="main_title_textsize">40sp</dimen>
+    <dimen name="main_upbox_height">35dp</dimen>
+    <dimen name="main_upbox_width">250dp</dimen>
+    <dimen name="main_small_margin">5dp</dimen>
+    <dimen name="main_downbigbox_height">100dp</dimen>
+    <dimen name="main_button_height">50dp</dimen>
+    <dimen name="history_padding_normal">10dp</dimen>
+    <dimen name="history_icon_height">35dp</dimen>
+    <dimen name="history_row_height">70dp</dimen>
+    <dimen name="fillproduct_culomn_height">50dp</dimen>
+    <dimen name="fillproduct_width">400dp</dimen>
+    <dimen name="fillproduct_button_width">100dp</dimen>
+</resources>

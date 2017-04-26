@@ -3,6 +3,7 @@ package com.skywavestudios.prefactor;
 import android.Manifest;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -13,8 +14,10 @@ import android.graphics.Canvas;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatTextView;
@@ -22,6 +25,9 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -73,8 +79,10 @@ public class MainActivity extends AppActivity implements DatePickerDialog.OnDate
     public View toast_layout;
     private SQLiteDatabase mDB;
     private FactorDBHelper _dbHelper;
+    private Cursor _Cursor;
     private int _Fees[] = new int[11];
     private int _Product_Cost[] = new int[11];
+    private ArrayList<Integer> _All_FactorNo = new ArrayList<Integer>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +96,10 @@ public class MainActivity extends AppActivity implements DatePickerDialog.OnDate
         initilize();
         _dbHelper = new FactorDBHelper(this);
         mDB = _dbHelper.getWritableDatabase();
+        _Cursor = AppConstant.getAllFactors(mDB);
+        for (_Cursor.moveToFirst(); !_Cursor.isAfterLast(); _Cursor.moveToNext()) {
+            _All_FactorNo.add(_Cursor.getInt(_Cursor.getColumnIndex(FactorsContract.FactorsEntry.COLUMN_FACTORNO)));
+        }
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(MainActivity.this,
@@ -139,6 +151,7 @@ public class MainActivity extends AppActivity implements DatePickerDialog.OnDate
         inflater = getLayoutInflater();
         toast_layout = inflater.inflate(R.layout.toast_theme,
                 (ViewGroup) findViewById(R.id.toast_layout_root));
+
     }
 
     public void draw_table() {
@@ -206,7 +219,7 @@ public class MainActivity extends AppActivity implements DatePickerDialog.OnDate
 
     public void tostring() {
 
-        totalString.setText(getString(R.string.main_totaltostring) + "  " + Persian_Number_To_String.GET_Number_To_PersianString(String.valueOf(total)));
+        totalString.setText(getString(R.string.main_totaltostring) + "  " + Persian_Number_To_String.GET_Number_To_PersianString(String.valueOf(total)) + getString(R.string.currency));
     }
 
     private void prefinish() {
@@ -241,7 +254,7 @@ public class MainActivity extends AppActivity implements DatePickerDialog.OnDate
         } else
             mTable[row_number][5].setText("");
         _Product_Cost[row_number] = p.Fee * p.No;
-        total=0;
+        total = 0;
         for (int i = 1; i <= 10; i++) {
             try {
                 total += _Product_Cost[i];
@@ -259,9 +272,7 @@ public class MainActivity extends AppActivity implements DatePickerDialog.OnDate
         date_view.setText(date);
     }
 
-    public void share_image(View v) {
-        if (!save_factor())
-            return;
+    public void share_image() {
         prefinish();
         Bitmap capture = Bitmap.createBitmap(factor_original.getWidth(), factor_original.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(capture);
@@ -290,9 +301,8 @@ public class MainActivity extends AppActivity implements DatePickerDialog.OnDate
 
     }
 
-    private boolean save_factor() {
-        boolean r = true;
-        Factor f = new Factor();
+    private void save_factor() {
+        final Factor f = new Factor();
         List<Product> f_ps = new ArrayList<Product>();
         for (int i = 1; i <= 10; i++) {
             Product p = new Product();
@@ -304,49 +314,57 @@ public class MainActivity extends AppActivity implements DatePickerDialog.OnDate
                 e.printStackTrace();
             }
             p.Scale = mTable[i][3].getText().toString();
-            f_ps.add(p);
+            if (!p.Name.isEmpty() && !p.Name.equals(" "))
+                f_ps.add(p);
         }
-        if (f_ps == null || f_ps.size() == 0) {
+        if (f_ps == null || f_ps.size() < 1) {
             Toast.makeText(this, "هیچ محصولی وارد نشده", Toast.LENGTH_LONG).show();
-            r = false;
-        } else
+        } else {
             f.Products = f_ps;
-        f.Customer = customer.getText().toString();
-        f.Date = date_view.getText().toString();
-        f.Description = description.getText().toString();
-        try {
-            f.No = Integer.parseInt(factorNo.getText().toString());
-            if (!(f.No > 0))
+            f.Customer = customer.getText().toString();
+            f.Date = date_view.getText().toString();
+            f.Description = description.getText().toString();
+            f.PhoneNo = phone.getText().toString();
+            try {
+                f.No = Integer.parseInt(factorNo.getText().toString());
+                if (f.No <= 0)
+                    f.No = 0;
+            } catch (Exception e) {
                 f.No = 0;
-        } catch (Exception e) {
-            f.No = 0;
-            e.printStackTrace();
+                e.printStackTrace();
+            }
+            if (f.No == 0 || _All_FactorNo.contains(f.No)) {
+                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case DialogInterface.BUTTON_POSITIVE:
+                                //Yes button clicked
+                                share_image();
+                                add_factor_toDB(f);
+                                break;
+
+                            case DialogInterface.BUTTON_NEGATIVE:
+                                //No button clicked
+                                break;
+                        }
+                    }
+                };
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setMessage(R.string.repeted_factor_no).setPositiveButton(R.string.yes, dialogClickListener)
+                        .setNegativeButton(R.string.no, dialogClickListener).show();
+
+            }
+
         }
-//        Factors _Factors;
-//        if (sp.getString(SharedPrefsMainKey.FactorList.toString(), null) != null) {
-//            Gson gson1 = new Gson();
-//            String json1 = sp.getString(SharedPrefsMainKey.FactorList.toString(), "");
-//            _Factors = gson1.fromJson(json1, Factors.class);
-//        } else {
-//            _Factors = new Factors();
-//        }
-//        if (_Factors.factorList == null)
-//            _Factors.factorList = new ArrayList<Factor>();
-//        _Factors.factorList.add(f);
-//        Gson gson2 = new Gson();
-//        String json2 = gson2.toJson(_Factors);
-//        e.putString(SharedPrefsMainKey.FactorList.toString(), json2);
-//        e.commit();
-        //
-        add_factor_toDB(f);
-        return r;
     }
 
-    public void go_to_history_list(View v) {
+    public void go_to_history_list() {
 //        Gson gson = new Gson();
 //        String json = sp.getString(SharedPrefsMainKey.FactorList.toString(), "");
 //        Factors mfactor = gson.fromJson(json, Factors.class);
-        mDB.query(
+        Cursor c = mDB.query(
                 FactorsContract.FactorsEntry.TABLE_NAME,
                 null,
                 null,
@@ -355,9 +373,10 @@ public class MainActivity extends AppActivity implements DatePickerDialog.OnDate
                 null,
                 FactorsContract.FactorsEntry.COLUMN_DATE
         );
-        if (mDB != null) {
+        if (mDB != null && c.getCount() > 0) {
             Intent i = new Intent(this, HistoryActivity.class);
             startActivity(i);
+            finish();
         } else {
             Toast.makeText(this, R.string.main_nohistory_error, Toast.LENGTH_LONG).show();
         }
@@ -375,4 +394,25 @@ public class MainActivity extends AppActivity implements DatePickerDialog.OnDate
         contentValues.put(FactorsContract.FactorsEntry.COLUMN_JSON, json2);
         return mDB.insert(FactorsContract.FactorsEntry.TABLE_NAME, null, contentValues);
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.actionbar_theme, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.actionbar_history:
+                go_to_history_list();
+                break;
+            case R.id.actionbar_save_share:
+                save_factor();
+                break;
+        }
+        return true;
+    }
+
 }
