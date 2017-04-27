@@ -8,8 +8,12 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -33,6 +37,7 @@ public class ShowFactorActivity extends AppActivity {
     TextView mdescription;
     TextView mTable[][] = new TextView[11][6];
     TableLayout products_table;
+    RelativeLayout mfactor_original;
     private int totalCost = 0;
 
     @Override
@@ -52,7 +57,7 @@ public class ShowFactorActivity extends AppActivity {
         mtotalString = (TextView) findViewById(R.id.image_total_string);
         products_table = (TableLayout) findViewById(R.id.image_factor_products_table);
         mdescription = (TextView) findViewById(R.id.image_description);
-
+        mfactor_original = (RelativeLayout) findViewById(R.id.showfactor);
 
     }
 
@@ -97,35 +102,35 @@ public class ShowFactorActivity extends AppActivity {
                     case 1:
                         if (i == 0)
                             mTable[i][j].setText(getString(R.string.main_producttitle));
-                        else
+                        else if (mfactor.Products.size() >= i)
                             mTable[i][j].setText(mfactor.Products.get(i - 1).Name);
                         lp.weight = 6;
                         break;
                     case 2:
                         if (i == 0)
                             mTable[i][j].setText(getString(R.string.main_productno));
-                        else
+                        else if (mfactor.Products.size() >= i)
                             mTable[i][j].setText(String.valueOf(mfactor.Products.get(i - 1).No));
                         lp.weight = 2;
                         break;
                     case 3:
                         if (i == 0)
                             mTable[i][j].setText(getString(R.string.main_productunit));
-                        else
+                        else if (mfactor.Products.size() >= i)
                             mTable[i][j].setText(mfactor.Products.get(i - 1).Scale);
                         lp.weight = 2;
                         break;
                     case 4:
                         if (i == 0)
                             mTable[i][j].setText(getString(R.string.main_productfee));
-                        else
+                        else if (mfactor.Products.size() >= i)
                             mTable[i][j].setText(AppConstant.Int_To_Price(mfactor.Products.get(i - 1).Fee));
                         lp.weight = 3;
                         break;
                     case 5:
                         if (i == 0)
                             mTable[i][j].setText(getString(R.string.main_producttotalcost));
-                        else {
+                        else if (mfactor.Products.size() >= i) {
                             mTable[i][j].setText(AppConstant.Int_To_Price(mfactor.Products.get(i - 1).No * mfactor.Products.get(i - 1).Fee));
                             totalCost += mfactor.Products.get(i - 1).No * mfactor.Products.get(i - 1).Fee;
                         }
@@ -137,5 +142,24 @@ public class ShowFactorActivity extends AppActivity {
             }
             products_table.addView(row);
         }
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.actionbar_theme, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.actionbar_save_share:
+                AppConstant.Share_Factor(mfactor_original, this);
+                break;
+            case R.id.actionbar_history:
+                onBackPressed();
+                break;
+        }
+        return true;
     }
 }

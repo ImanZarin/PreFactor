@@ -1,6 +1,7 @@
 package com.skywavestudios.prefactor;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -83,6 +84,7 @@ public class MainActivity extends AppActivity implements DatePickerDialog.OnDate
     private int _Fees[] = new int[11];
     private int _Product_Cost[] = new int[11];
     private ArrayList<Integer> _All_FactorNo = new ArrayList<Integer>();
+    private Activity _Activity = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,18 +124,6 @@ public class MainActivity extends AppActivity implements DatePickerDialog.OnDate
         description = (EditText) findViewById(R.id.description);
         sp = getSharedPreferences("", 0);
         e = sp.edit();
-        if (sp.getString(SharedPrefsMainKey.PhoneNo.toString(), null) != null) {
-            phone.setText(sp.getString(SharedPrefsMainKey.PhoneNo.toString(), null));
-        }
-        if (sp.getInt(SharedPrefsMainKey.LastFactorNo.toString(), 0) != 0) {
-            int lastfactorNo = sp.getInt(SharedPrefsMainKey.LastFactorNo.toString(), 0);
-            factorNo.setText(String.valueOf(lastfactorNo + 1));
-        }
-        if (sp.getStringSet(SharedPrefsMainKey.CustomerList.toString(), null) != null) {
-            suggestion_list = new ArrayList<String>(sp.getStringSet(SharedPrefsMainKey.CustomerList.toString(), null));
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, suggestion_list);
-            customer.setAdapter(adapter);
-        }
         date_view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -147,11 +137,47 @@ public class MainActivity extends AppActivity implements DatePickerDialog.OnDate
                 datePickerDialog.show(getFragmentManager(), "Datepickerdialog");
             }
         });
+        if (sp.getString(SharedPrefsMainKey.PhoneNo.toString(), null) != null) {
+            phone.setText(sp.getString(SharedPrefsMainKey.PhoneNo.toString(), null));
+        }
+        if (sp.getInt(SharedPrefsMainKey.LastFactorNo.toString(), 0) != 0) {
+            int lastfactorNo = sp.getInt(SharedPrefsMainKey.LastFactorNo.toString(), 0);
+            factorNo.setText(String.valueOf(lastfactorNo + 1));
+        }
+        if (sp.getStringSet(SharedPrefsMainKey.CustomerList.toString(), null) != null) {
+            suggestion_list = new ArrayList<String>(sp.getStringSet(SharedPrefsMainKey.CustomerList.toString(), null));
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, suggestion_list);
+            customer.setAdapter(adapter);
+        }
         draw_table();
         inflater = getLayoutInflater();
         toast_layout = inflater.inflate(R.layout.toast_theme,
                 (ViewGroup) findViewById(R.id.toast_layout_root));
 
+    }
+
+    private void initilize_factor() {
+        if (sp.getString(SharedPrefsMainKey.PhoneNo.toString(), null) != null) {
+            phone.setText(sp.getString(SharedPrefsMainKey.PhoneNo.toString(), null));
+        }
+        if (sp.getInt(SharedPrefsMainKey.LastFactorNo.toString(), 0) != 0) {
+            int lastfactorNo = sp.getInt(SharedPrefsMainKey.LastFactorNo.toString(), 0);
+            factorNo.setText(String.valueOf(lastfactorNo + 1));
+        }
+        if (sp.getStringSet(SharedPrefsMainKey.CustomerList.toString(), null) != null) {
+            suggestion_list = new ArrayList<String>(sp.getStringSet(SharedPrefsMainKey.CustomerList.toString(), null));
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, suggestion_list);
+            customer.setAdapter(adapter);
+        }
+        for (int i = 1; i <= 10; i++) {
+            for (int j = 1; j <= 5; j++)
+                mTable[i][j].setText("");
+        }
+        totalString.setText("");
+        totalno.setText("");
+        customer.setText("");
+        description.setText("");
+        date_view.setText("");
     }
 
     public void draw_table() {
@@ -272,26 +298,6 @@ public class MainActivity extends AppActivity implements DatePickerDialog.OnDate
         date_view.setText(date);
     }
 
-    public void share_image() {
-        prefinish();
-        Bitmap capture = Bitmap.createBitmap(factor_original.getWidth(), factor_original.getHeight(), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(capture);
-        factor_original.draw(canvas);
-        Intent share = new Intent(Intent.ACTION_SEND);
-        share.setType("image/jpeg");
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        capture.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-        File f = new File(Environment.getExternalStorageDirectory() + File.separator + "temporary_file.jpg");
-        try {
-            f.createNewFile();
-            FileOutputStream fo = new FileOutputStream(f);
-            fo.write(bytes.toByteArray());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        share.putExtra(Intent.EXTRA_STREAM, Uri.parse("file:///sdcard/temporary_file.jpg"));
-        startActivity(Intent.createChooser(share, "Share Image"));
-    }
 
     public void show_product_popup(View v, int row_no) {
         FragmentManager fm = getSupportFragmentManager();
@@ -318,7 +324,7 @@ public class MainActivity extends AppActivity implements DatePickerDialog.OnDate
                 f_ps.add(p);
         }
         if (f_ps == null || f_ps.size() < 1) {
-            Toast.makeText(this, "هیچ محصولی وارد نشده", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.no_product_find, Toast.LENGTH_LONG).show();
         } else {
             f.Products = f_ps;
             f.Customer = customer.getText().toString();
@@ -340,8 +346,9 @@ public class MainActivity extends AppActivity implements DatePickerDialog.OnDate
                         switch (which) {
                             case DialogInterface.BUTTON_POSITIVE:
                                 //Yes button clicked
-                                share_image();
                                 add_factor_toDB(f);
+                                AppConstant.Share_Factor(factor_original, _Activity);
+                                initilize_factor();
                                 break;
 
                             case DialogInterface.BUTTON_NEGATIVE:
@@ -355,6 +362,10 @@ public class MainActivity extends AppActivity implements DatePickerDialog.OnDate
                 builder.setMessage(R.string.repeted_factor_no).setPositiveButton(R.string.yes, dialogClickListener)
                         .setNegativeButton(R.string.no, dialogClickListener).show();
 
+            } else {
+                add_factor_toDB(f);
+                AppConstant.Share_Factor(factor_original, this);
+                initilize_factor();
             }
 
         }
@@ -392,7 +403,10 @@ public class MainActivity extends AppActivity implements DatePickerDialog.OnDate
         Gson gson2 = new Gson();
         String json2 = gson2.toJson(f);
         contentValues.put(FactorsContract.FactorsEntry.COLUMN_JSON, json2);
-        return mDB.insert(FactorsContract.FactorsEntry.TABLE_NAME, null, contentValues);
+        Long r = mDB.insert(FactorsContract.FactorsEntry.TABLE_NAME, null, contentValues);
+        prefinish();
+        Toast.makeText(this, R.string.succesfully_saved, Toast.LENGTH_LONG).show();
+        return r;
     }
 
     @Override

@@ -21,7 +21,7 @@
         android:layout_marginStart="@dimen/main_side_margin"
         android:layout_marginTop="@dimen/main_normal_margin"
         android:completionThreshold="1"
-        android:hint="@string/fillproduct_title" />
+        android:hint="@string/fillproduct_title"/>
 
     <EditText
         android:id="@+id/fillproduct_no_edittext"

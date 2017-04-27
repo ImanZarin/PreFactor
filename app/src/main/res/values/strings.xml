@@ -16,7 +16,7 @@
     <string name="main_productno">تعداد</string>
     <string name="main_productunit">واحد</string>
     <string name="main_productfee"> مبلغ واحد</string>
-    <string name="main_producttotalcost">مبلغ کل:</string>
+    <string name="main_producttotalcost">مبلغ کل(ریال)</string>
     <string name="main_rowno">شماره</string>
     <string name="fillproduct_errormessage">تعداد و مبلغ باید مرقوم شوند</string>
     <string name="main_nohistory_error">هیچ فاکتوری ثبت نشده است</string>
@@ -120,6 +120,8 @@
     <string name="actionbar_save_share">ذخیره و ارسال</string>
     <string name="currency">ریال</string>
     <string name="repeted_factor_no">شماره فاکتور تکراری است، آیا میخواهید ادامه دهید؟</string>
+    <string name="succesfully_saved">فاکتور با موفقیت ذخیره شد</string>
+    <string name="no_product_find">هیچ محصولی وارد نشده است</string>
     <string name="yes">بلی</string>
     <string name="no">خیر</string>
     <string name="dummy_button">Dummy Button</string>
