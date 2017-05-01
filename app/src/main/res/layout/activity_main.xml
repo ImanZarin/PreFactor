@@ -37,96 +37,100 @@
                 android:textSize="@dimen/main_title_textsize"
                 android:textStyle="bold" />
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_marginTop="@dimen/main_normal_margin"
-                android:layout_weight="35">
+                android:layout_weight="35"
+                android:orientation="horizontal"
+                android:weightSum="10">
 
-                <ImageView
-                    android:id="@+id/phone_icon"
-                    android:layout_width="@dimen/main_upbox_height"
-                    android:layout_height="@dimen/main_upbox_height"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_centerVertical="true"
-                    android:background="@drawable/phone" />
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1.5">
+
+                    <ImageView
+                        android:id="@+id/phone_icon"
+                        android:layout_width="@dimen/main_upbox_height"
+                        android:layout_height="@dimen/main_upbox_height"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:background="@drawable/phone" />
+                </RelativeLayout>
 
                 <EditText
                     android:id="@+id/phoneNo_editText"
-                    android:layout_width="@dimen/main_upbox_width"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="@dimen/main_normal_margin"
                     android:layout_marginStart="@dimen/main_normal_margin"
-                    android:layout_toEndOf="@id/phone_icon"
-                    android:layout_toRightOf="@id/phone_icon"
+                    android:layout_weight="3.5"
                     android:inputType="phone"
                     android:textDirection="ltr" />
 
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/main_normal_margin"
+                    android:layout_marginRight="@dimen/main_normal_margin"
+                    android:layout_weight="1.5"
+                    android:text="@string/main_factorno" />
+
                 <EditText
                     android:id="@+id/factorNo_editText"
-                    android:layout_width="@dimen/main_upbox_width"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
+                    android:layout_weight="3.5"
                     android:inputType="number"
                     android:textDirection="ltr" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginEnd="@dimen/main_normal_margin"
-                    android:layout_marginRight="@dimen/main_normal_margin"
-                    android:layout_toLeftOf="@id/factorNo_editText"
-                    android:layout_toStartOf="@id/factorNo_editText"
-                    android:text="@string/main_factorno" />
-            </RelativeLayout>
 
-            <RelativeLayout
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_marginTop="@dimen/main_normal_margin"
-                android:layout_weight="35">
+                android:layout_weight="35"
+                android:orientation="horizontal"
+                android:weightSum="10">
 
                 <TextView
                     android:id="@+id/customer_title"
-                    android:layout_width="@dimen/main_upbox_height"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_centerVertical="true"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1.5"
                     android:text="@string/main_customer" />
 
                 <AutoCompleteTextView
                     android:id="@+id/customer_editText"
-                    android:layout_width="@dimen/main_upbox_width"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="@dimen/main_normal_margin"
                     android:layout_marginStart="@dimen/main_normal_margin"
-                    android:layout_toEndOf="@id/customer_title"
-                    android:layout_toRightOf="@id/customer_title"
+                    android:layout_weight="3.5"
                     android:completionThreshold="1" />
 
                 <TextView
-                    android:id="@+id/date_editText"
-                    android:layout_width="@dimen/main_upbox_width"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
+                    android:layout_marginEnd="@dimen/main_normal_margin"
+                    android:layout_marginRight="@dimen/main_normal_margin"
+                    android:layout_weight="1.5"
+                    android:text="@string/main_date" />
+
+                <TextView
+                    android:id="@+id/date_editText"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3.5"
                     android:textDirection="ltr"
                     android:theme="@style/EditTextTheme" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginEnd="@dimen/main_normal_margin"
-                    android:layout_marginRight="@dimen/main_normal_margin"
-                    android:layout_toLeftOf="@id/date_editText"
-                    android:layout_toStartOf="@id/date_editText"
-                    android:text="@string/main_date" />
-            </RelativeLayout>
+
+            </LinearLayout>
 
 
         </LinearLayout>
@@ -155,15 +159,17 @@
             android:layout_marginRight="@dimen/main_normal_margin"
             android:layout_marginStart="@dimen/main_normal_margin"
             android:orientation="vertical"
+            android:weightSum="10"
             app:layout_heightPercent="20%">
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/main_upbox_height"
+                android:layout_height="0dp"
                 android:layout_marginEnd="@dimen/main_side_margin"
                 android:layout_marginLeft="@dimen/main_side_margin"
                 android:layout_marginRight="@dimen/main_side_margin"
                 android:layout_marginStart="@dimen/main_side_margin"
+                android:layout_weight="3"
                 android:orientation="horizontal">
 
                 <TextView
@@ -186,9 +192,11 @@
             <EditText
                 android:id="@+id/description"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/main_downbigbox_height"
+                android:layout_height="0dp"
+                android:layout_weight="7"
                 android:hint="@string/main_description" />
         </LinearLayout>
+
     </android.support.percent.PercentRelativeLayout>
 
 

@@ -178,6 +178,9 @@ public class MainActivity extends AppActivity implements DatePickerDialog.OnDate
         customer.setText("");
         description.setText("");
         date_view.setText("");
+        for (int i = 1; i <= 10; i++) {
+            _Product_Cost[i] = 0;
+        }
     }
 
     public void draw_table() {
@@ -359,8 +362,8 @@ public class MainActivity extends AppActivity implements DatePickerDialog.OnDate
                 };
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setMessage(R.string.repeted_factor_no).setPositiveButton(R.string.yes, dialogClickListener)
-                        .setNegativeButton(R.string.no, dialogClickListener).show();
+                builder.setMessage(R.string.repeted_factor_no).setPositiveButton(R.string.continue_, dialogClickListener)
+                        .setNegativeButton(R.string.cancel, dialogClickListener).show();
 
             } else {
                 add_factor_toDB(f);

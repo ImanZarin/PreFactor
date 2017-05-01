@@ -2,6 +2,8 @@ package com.skywavestudios.prefactor;
 
 import android.provider.BaseColumns;
 
+import java.sql.Date;
+
 /**
  * Created by Iman on 4/19/2017.
  */

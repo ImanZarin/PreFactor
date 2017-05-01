@@ -159,7 +159,17 @@ public class ShowFactorActivity extends AppActivity {
             case R.id.actionbar_history:
                 onBackPressed();
                 break;
+            case android.R.id.home:
+                onBackPressed();
+                break;
         }
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent i = new Intent(this, HistoryActivity.class);
+        startActivity(i);
+        finish();
     }
 }

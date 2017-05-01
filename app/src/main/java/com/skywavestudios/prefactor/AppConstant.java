@@ -22,7 +22,7 @@ import java.text.DecimalFormat;
  */
 
 public class AppConstant {
-    public static String Int_To_Price(int i){
+    public static String Int_To_Price(int i) {
         DecimalFormat formatter = new DecimalFormat("###,###,###,###,###");
         String yourFormattedString = formatter.format(i);
         return yourFormattedString;
@@ -41,7 +41,7 @@ public class AppConstant {
 
     }
 
-    public static void Share_Factor(View factor_view, Activity _this){
+    public static void Share_Factor(View factor_view, Activity _this) {
         Bitmap capture = Bitmap.createBitmap(factor_view.getWidth(), factor_view.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(capture);
         factor_view.draw(canvas);
@@ -59,5 +59,9 @@ public class AppConstant {
         }
         share.putExtra(Intent.EXTRA_STREAM, Uri.parse("file:///sdcard/temporary_file.jpg"));
         _this.startActivity(Intent.createChooser(share, "Share Image"));
+    }
+
+    public static void RemoveData(Long mL, SQLiteDatabase mDb) {
+        mDb.delete(FactorsContract.FactorsEntry.TABLE_NAME, FactorsContract.FactorsEntry._ID + "=" + mL, null);
     }
 }

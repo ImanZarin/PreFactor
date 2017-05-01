@@ -3,6 +3,7 @@ package com.skywavestudios.prefactor;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.sql.Date;
 import java.util.List;
 
 /**

@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">پیش فاکتور</string>
     <string name="main_title">پیش فاکتور</string>
-    <string name="main_factorno">شماره فاکتور</string>
+    <string name="main_factorno">شماره</string>
     <string name="main_customer">مشتری</string>
     <string name="main_date">تاریخ</string>
     <string name="main_description">توضیحات</string>
@@ -120,10 +120,13 @@
     <string name="actionbar_save_share">ذخیره و ارسال</string>
     <string name="currency">ریال</string>
     <string name="repeted_factor_no">شماره فاکتور تکراری است، آیا میخواهید ادامه دهید؟</string>
+    <string name="remove_alert">آیا از حذف فاکتور اطمینان دارید</string>
     <string name="succesfully_saved">فاکتور با موفقیت ذخیره شد</string>
     <string name="no_product_find">هیچ محصولی وارد نشده است</string>
-    <string name="yes">بلی</string>
+    <string name="continue_">ادامه</string>
     <string name="no">خیر</string>
+    <string name="remove">حذف</string>
+    <string name="cancel">انصراف</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
 </resources>

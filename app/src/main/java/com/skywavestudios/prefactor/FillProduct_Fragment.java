@@ -119,8 +119,7 @@ public class FillProduct_Fragment extends DialogFragment {
             no.setText(((MainActivity) getActivity()).mTable[RowNO][2].getText().toString());
         if (!((MainActivity) getActivity()).mTable[RowNO][3].getText().equals(""))
             unit.setText(((MainActivity) getActivity()).mTable[RowNO][3].getText().toString());
-        if (!((MainActivity) getActivity()).mTable[RowNO][4].getText().equals(""))
-            fee.setText(((MainActivity) getActivity()).mTable[RowNO][4].getText().toString());
+        fee.setText("");
 
         ok.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -170,9 +169,7 @@ public class FillProduct_Fragment extends DialogFragment {
             ((MainActivity) getActivity()).edit_product(new_product, RowNO);
             this.dismiss();
         } catch (Exception e) {
-//            Toast t = Toast.makeText(getContext(), R.string.fillproduct_errormessage, Toast.LENGTH_LONG);
-            Toast t = new Toast(getContext());
-            t.setView(((MainActivity) getActivity()).toast_layout);
+            Toast t = Toast.makeText(getContext(), R.string.fillproduct_errormessage, Toast.LENGTH_LONG);
             t.show();
             e.printStackTrace();
         }

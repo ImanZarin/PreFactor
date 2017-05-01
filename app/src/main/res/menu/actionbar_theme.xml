@@ -5,11 +5,11 @@
         android:id="@+id/actionbar_history"
         android:icon="@drawable/list"
         android:title="@string/actionbar_history"
-        app:showAsAction="always|withText"/>
+        app:showAsAction="ifRoom|withText"/>
 
     <!-- Settings, should always be in the overflow -->
     <item android:id="@+id/actionbar_save_share"
         android:icon="@drawable/share"
         android:title="@string/actionbar_save_share"
-        app:showAsAction="always|withText"/>
+        app:showAsAction="ifRoom|withText"/>
 </menu>
