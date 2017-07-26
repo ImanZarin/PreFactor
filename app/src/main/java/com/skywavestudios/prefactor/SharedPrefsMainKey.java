@@ -11,4 +11,8 @@ public enum SharedPrefsMainKey {
     ProductList,
     UnitList,
     FactorList,
+    CompanyName,
+    EconomicCode,
+    Address,
+    LastLogoNo,
 }

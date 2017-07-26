@@ -1,5 +1,6 @@
 package com.skywavestudios.prefactor;
 
+import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -17,5 +18,8 @@ public class Factor {
     public String Description;
     public List<Product> Products;
     public String PhoneNo;
-
+    public String CompanyName;
+    public String EconomicCode;
+    public String Address;
+    public String Image;
 }

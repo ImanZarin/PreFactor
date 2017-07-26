@@ -11,10 +11,14 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
@@ -34,7 +38,10 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TableLayout;
@@ -46,11 +53,21 @@ import com.google.gson.Gson;
 import com.mohamadamin.persianmaterialdatetimepicker.date.DatePickerDialog;
 import com.mohamadamin.persianmaterialdatetimepicker.date.MonthAdapter;
 import com.mohamadamin.persianmaterialdatetimepicker.utils.PersianCalendar;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.sql.SQLData;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -60,14 +77,21 @@ import java.util.Set;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
+import static android.R.attr.bitmap;
+import static com.skywavestudios.prefactor.AppConstant.AppContext;
+import static com.skywavestudios.prefactor.AppConstant.GET_FROM_GALLERY;
+
 public class MainActivity extends AppActivity implements DatePickerDialog.OnDateSetListener {
 
     private EditText phone;
+    EditText address;
     EditText factorNo;
+    EditText economicCode;
     AutoCompleteTextView customer;
     TextView date_view;
     TextView totalString;
     TextView totalno;
+    EditText mTitle;
     SharedPreferences sp;
     SharedPreferences.Editor e;
     TableLayout products_table;
@@ -85,10 +109,15 @@ public class MainActivity extends AppActivity implements DatePickerDialog.OnDate
     private int _Product_Cost[] = new int[11];
     private ArrayList<Integer> _All_FactorNo = new ArrayList<Integer>();
     private Activity _Activity = this;
+    private ImageButton img;
+    private String logoUri;
+    private Bitmap _img;
+    private Uri _imgUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        AppConstant.AppContext = getApplicationContext();
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
                 .setDefaultFontPath("fonts/iran_sans.ttf")
                 .setFontAttrId(R.attr.fontPath)
@@ -114,6 +143,9 @@ public class MainActivity extends AppActivity implements DatePickerDialog.OnDate
     private void initilize() {
 
         phone = (EditText) findViewById(R.id.phoneNo_editText);
+        address = (EditText) findViewById(R.id.address_edittext);
+        economicCode = (EditText) findViewById(R.id.economicCode_editText);
+        mTitle = (EditText) findViewById(R.id.main_title);
         factorNo = (EditText) findViewById(R.id.factorNo_editText);
         customer = (AutoCompleteTextView) findViewById(R.id.customer_editText);
         date_view = (TextView) findViewById(R.id.date_editText);
@@ -121,7 +153,8 @@ public class MainActivity extends AppActivity implements DatePickerDialog.OnDate
         totalno = (TextView) findViewById(R.id.total_no);
         products_table = (TableLayout) findViewById(R.id.factor_products_table);
         factor_original = (RelativeLayout) findViewById(R.id.factor);
-        description = (EditText) findViewById(R.id.description);
+        description = (EditText) findViewById(R.id.description_edittext);
+        img = (ImageButton) findViewById(R.id.main_logo);
         sp = getSharedPreferences("", 0);
         e = sp.edit();
         date_view.setOnClickListener(new View.OnClickListener() {
@@ -137,8 +170,17 @@ public class MainActivity extends AppActivity implements DatePickerDialog.OnDate
                 datePickerDialog.show(getFragmentManager(), "Datepickerdialog");
             }
         });
+        if (sp.getString(SharedPrefsMainKey.CompanyName.toString(), null) != null) {
+            mTitle.setText(sp.getString(SharedPrefsMainKey.CompanyName.toString(), null));
+        }
         if (sp.getString(SharedPrefsMainKey.PhoneNo.toString(), null) != null) {
             phone.setText(sp.getString(SharedPrefsMainKey.PhoneNo.toString(), null));
+        }
+        if (sp.getString(SharedPrefsMainKey.Address.toString(), null) != null) {
+            address.setText(sp.getString(SharedPrefsMainKey.Address.toString(), null));
+        }
+        if (sp.getString(SharedPrefsMainKey.EconomicCode.toString(), null) != null) {
+            economicCode.setText(sp.getString(SharedPrefsMainKey.EconomicCode.toString(), null));
         }
         if (sp.getInt(SharedPrefsMainKey.LastFactorNo.toString(), 0) != 0) {
             int lastfactorNo = sp.getInt(SharedPrefsMainKey.LastFactorNo.toString(), 0);
@@ -149,6 +191,32 @@ public class MainActivity extends AppActivity implements DatePickerDialog.OnDate
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, suggestion_list);
             customer.setAdapter(adapter);
         }
+        Bitmap b;
+        if (sp.getInt(SharedPrefsMainKey.LastLogoNo.toString(), 0) != 0) {
+            final File dir1 = AppConstant.App_Folder_Path();
+            Integer thumbNo1 = sp.getInt(SharedPrefsMainKey.LastLogoNo.toString(), 0);
+            String thumbUrl1 = thumbNo1.toString() + ".jpg";
+            String thumbUrl2 = thumbNo1.toString() + ".JPG";
+            String thumbUrl3 = thumbNo1.toString() + ".png";
+            String thumbUrl4 = thumbNo1.toString() + ".PNG";
+            final File imageFileName1 = new File(dir1, thumbUrl1);
+            final File imageFileName2 = new File(dir1, thumbUrl2);
+            final File imageFileName3 = new File(dir1, thumbUrl3);
+            final File imageFileName4 = new File(dir1, thumbUrl4);
+            if (imageFileName1.exists())
+                b = BitmapFactory.decodeFile(imageFileName1.getAbsolutePath());
+            else if (imageFileName2.exists())
+                b = BitmapFactory.decodeFile(imageFileName2.getAbsolutePath());
+            else if (imageFileName3.exists())
+                b = BitmapFactory.decodeFile(imageFileName3.getAbsolutePath());
+            else if (imageFileName4.exists())
+                b = BitmapFactory.decodeFile(imageFileName4.getAbsolutePath());
+            else
+                b = ((BitmapDrawable) getResources().getDrawable(R.drawable.logo_sample)).getBitmap();
+        } else
+            b = ((BitmapDrawable) getResources().getDrawable(R.drawable.logo_sample)).getBitmap();
+        img.setImageBitmap(b);
+        img.setScaleType(ImageView.ScaleType.FIT_START);
         draw_table();
         inflater = getLayoutInflater();
         toast_layout = inflater.inflate(R.layout.toast_theme,
@@ -157,8 +225,17 @@ public class MainActivity extends AppActivity implements DatePickerDialog.OnDate
     }
 
     private void initilize_factor() {
+        if (sp.getString(SharedPrefsMainKey.CompanyName.toString(), null) != null) {
+            mTitle.setText(sp.getString(SharedPrefsMainKey.CompanyName.toString(), null));
+        }
         if (sp.getString(SharedPrefsMainKey.PhoneNo.toString(), null) != null) {
             phone.setText(sp.getString(SharedPrefsMainKey.PhoneNo.toString(), null));
+        }
+        if (sp.getString(SharedPrefsMainKey.Address.toString(), null) != null) {
+            address.setText(sp.getString(SharedPrefsMainKey.Address.toString(), null));
+        }
+        if (sp.getString(SharedPrefsMainKey.EconomicCode.toString(), null) != null) {
+            economicCode.setText(sp.getString(SharedPrefsMainKey.EconomicCode.toString(), null));
         }
         if (sp.getInt(SharedPrefsMainKey.LastFactorNo.toString(), 0) != 0) {
             int lastfactorNo = sp.getInt(SharedPrefsMainKey.LastFactorNo.toString(), 0);
@@ -258,6 +335,9 @@ public class MainActivity extends AppActivity implements DatePickerDialog.OnDate
             e.printStackTrace();
         }
         e.putString(SharedPrefsMainKey.PhoneNo.toString(), phone.getText().toString());
+        e.putString(SharedPrefsMainKey.Address.toString(), address.getText().toString());
+        e.putString(SharedPrefsMainKey.EconomicCode.toString(), economicCode.getText().toString());
+        e.putString(SharedPrefsMainKey.CompanyName.toString(), mTitle.getText().toString());
         Set<String> sl = new HashSet<String>();
         if (!suggestion_list.contains(customer.getText()))
             suggestion_list.add(customer.getText().toString());
@@ -334,6 +414,10 @@ public class MainActivity extends AppActivity implements DatePickerDialog.OnDate
             f.Date = date_view.getText().toString();
             f.Description = description.getText().toString();
             f.PhoneNo = phone.getText().toString();
+            f.Address = address.getText().toString();
+            f.EconomicCode = economicCode.getText().toString();
+            f.CompanyName = mTitle.getText().toString();
+            f.Image = logoUri;
             try {
                 f.No = Integer.parseInt(factorNo.getText().toString());
                 if (f.No <= 0)
@@ -430,6 +514,121 @@ public class MainActivity extends AppActivity implements DatePickerDialog.OnDate
                 break;
         }
         return true;
+    }
+
+    public void change_image(View v) {
+        _imgUri = null;
+        CropImage.activity(_imgUri)
+                .setCropShape(CropImageView.CropShape.RECTANGLE)
+                .start(this);
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+/*
+        //Detects request codes
+        if (requestCode == GET_FROM_GALLERY && resultCode == Activity.RESULT_OK) {
+            Uri selectedImage = data.getData();
+            Bitmap bitmap = null;
+            try {
+                bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
+            } catch (FileNotFoundException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            //saveImage(data);
+            img.setImageBitmap(bitmap);
+            img.setScaleType(ImageView.ScaleType.FIT_START);
+        }
+*/
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == RESULT_OK) {
+
+                Uri resultUri = result.getUri();
+                _imgUri = resultUri;
+                saveImage(resultUri);
+
+                Picasso.with(AppContext).load(resultUri).into(new Target() {
+                    @Override
+                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                        img.setImageBitmap(bitmap);
+                        img.setScaleType(ImageView.ScaleType.FIT_START);
+                    }
+
+                    @Override
+                    public void onBitmapFailed(Drawable errorDrawable) {
+/*
+                        Picasso.with(AppContext)
+                                .load(_imgUri)
+                                .placeholder(R.drawable.ic_account_circle_white_48dp)
+                                .into(mBinding.cropImageView);
+*/
+                    }
+
+                    @Override
+                    public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+                    }
+                });
+
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Exception error = result.getError();
+            }
+        }
+    }
+
+    private void saveImage(Uri sourceuri) {
+        Integer thumbNo = sp.getInt(SharedPrefsMainKey.LastLogoNo.toString(), 0) + 1;
+        e.putInt(SharedPrefsMainKey.LastLogoNo.toString(), thumbNo);
+        logoUri = _imgUri.toString();
+        File createDir = AppConstant.App_Folder_Path();
+        /*
+        OutputStream out;
+        File createDir = AppConstant.App_Folder_Path();
+        if (!createDir.exists()) {
+            createDir.mkdir();
+        }
+        File file = new File(createDir, thumbNo.toString() + logoUri.substring(logoUri.lastIndexOf(".")));
+        try {
+            file.createNewFile();
+            out = new FileOutputStream(file);
+            out.write(data);
+            out.close();
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+*/
+        String sourceFilename = sourceuri.getPath();
+        String destinationFilename = createDir.toString() + thumbNo.toString() + logoUri.substring(logoUri.lastIndexOf("."));
+
+        BufferedInputStream bis = null;
+        BufferedOutputStream bos = null;
+
+        try {
+            bis = new BufferedInputStream(new FileInputStream(sourceFilename));
+            bos = new BufferedOutputStream(new FileOutputStream(destinationFilename, false));
+            byte[] buf = new byte[1024];
+            bis.read(buf);
+            do {
+                bos.write(buf);
+            } while (bis.read(buf) != -1);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (bis != null) bis.close();
+                if (bos != null) bos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 }

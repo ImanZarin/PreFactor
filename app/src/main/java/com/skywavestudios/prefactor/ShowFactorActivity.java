@@ -13,6 +13,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -30,6 +31,7 @@ public class ShowFactorActivity extends AppActivity {
     Factor mfactor;
     TextView mdate;
     TextView mphone;
+    TextView mCompanyName;
     TextView mfactorNo;
     TextView mcustomer;
     TextView mtotal;
@@ -51,6 +53,7 @@ public class ShowFactorActivity extends AppActivity {
     private void initilize() {
         mdate = (TextView) findViewById(R.id.image_date_editText);
         mphone = (TextView) findViewById(R.id.image_phoneNo_editText);
+        mCompanyName = (TextView) findViewById(R.id.image_title);
         mfactorNo = (TextView) findViewById(R.id.image_factorNo_editText);
         mcustomer = (TextView) findViewById(R.id.image_customer_editText);
         mtotal = (TextView) findViewById(R.id.image_total_no);
@@ -67,6 +70,7 @@ public class ShowFactorActivity extends AppActivity {
         mfactor = gson.fromJson(json, Factor.class);
         mdate.setText(mfactor.Date);
         mphone.setText(mfactor.PhoneNo);
+        mCompanyName.setText(mfactor.CompanyName);
         mfactorNo.setText(String.valueOf(mfactor.No));
         mcustomer.setText(mfactor.Customer);
         draw_table();
@@ -143,6 +147,7 @@ public class ShowFactorActivity extends AppActivity {
             products_table.addView(row);
         }
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();

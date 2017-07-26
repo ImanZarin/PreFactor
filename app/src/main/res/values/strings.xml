@@ -2,9 +2,11 @@
     <string name="app_name">پیش فاکتور</string>
     <string name="main_title">پیش فاکتور</string>
     <string name="main_factorno">شماره</string>
+    <string name="main_ecocode">کد اقتصادی</string>
     <string name="main_customer">مشتری</string>
     <string name="main_date">تاریخ</string>
     <string name="main_description">توضیحات</string>
+    <string name="main_address">آدرس</string>
     <string name="fillproduct_title">عنوان</string>
     <string name="fillproduct_no">تعداد</string>
     <string name="fillproduct_unit">واحد</string>

@@ -7,7 +7,9 @@
         android:largeScreens="true"
         android:normalScreens="true"
         android:smallScreens="true" />
+
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -43,6 +45,9 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".HistoryActivity" />
         </activity>
+        <activity
+            android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:theme="@style/Base.Theme.AppCompat" />
     </application>
 
 </manifest>

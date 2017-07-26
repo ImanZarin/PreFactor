@@ -2,6 +2,7 @@ package com.skywavestudios.prefactor;
 
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -22,6 +23,10 @@ import java.text.DecimalFormat;
  */
 
 public class AppConstant {
+
+    public static final int GET_FROM_GALLERY = 3;
+    public static Context AppContext;
+
     public static String Int_To_Price(int i) {
         DecimalFormat formatter = new DecimalFormat("###,###,###,###,###");
         String yourFormattedString = formatter.format(i);
@@ -63,5 +68,15 @@ public class AppConstant {
 
     public static void RemoveData(Long mL, SQLiteDatabase mDb) {
         mDb.delete(FactorsContract.FactorsEntry.TABLE_NAME, FactorsContract.FactorsEntry._ID + "=" + mL, null);
+    }
+
+    public final static File App_Folder_Path() {
+        File s = null;
+        try {
+            s = AppContext.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return s;
     }
 }

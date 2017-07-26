@@ -4,7 +4,7 @@
     <dimen name="main_side_margin">20dp</dimen>
     <dimen name="main_title_height">30dp</dimen>
     <dimen name="main_normal_margin">10dp</dimen>
-    <dimen name="main_title_textsize">10sp</dimen>
+    <dimen name="main_title_textsize">20sp</dimen>
     <dimen name="app_text_size">10sp</dimen>
     <dimen name="main_upbox_height">35dp</dimen>
     <dimen name="main_upbox_width">112dp</dimen>
