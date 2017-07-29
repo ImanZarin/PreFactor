@@ -33,7 +33,7 @@
         android:layout_marginStart="@dimen/main_side_margin"
         android:layout_marginTop="@dimen/main_normal_margin"
         android:hint="@string/fillproduct_no"
-        android:inputType="number" />
+        android:inputType="numberDecimal" />
 
     <AutoCompleteTextView
         android:id="@+id/fillproduct_unit_edittext"

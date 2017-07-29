@@ -77,12 +77,15 @@ public class FillProduct_Fragment extends DialogFragment {
         no.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+                if (s.toString().contains(".") && s.subSequence(s.toString().lastIndexOf("."), s.length()).length() > 2) {
+                    if (s.subSequence(s.toString().lastIndexOf("."), s.length()).length() > 3)
+                        no.setText(s.subSequence(0, s.length() - 1));
+                    unit.requestFocus();
+                }
             }
 
             @Override
@@ -165,7 +168,7 @@ public class FillProduct_Fragment extends DialogFragment {
         new_product.Scale = unit.getText().toString();
         try {
             new_product.Fee = Integer.valueOf(fee.getText().toString());
-            new_product.No = Integer.valueOf(no.getText().toString());
+            new_product.No = Float.parseFloat(no.getText().toString());
             ((MainActivity) getActivity()).edit_product(new_product, RowNO);
             this.dismiss();
         } catch (Exception e) {

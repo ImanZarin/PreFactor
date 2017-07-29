@@ -5,6 +5,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Gravity;
@@ -14,6 +15,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -31,6 +33,8 @@ public class ShowFactorActivity extends AppActivity {
     Factor mfactor;
     TextView mdate;
     TextView mphone;
+    TextView mEconomicCode;
+    TextView mAddress;
     TextView mCompanyName;
     TextView mfactorNo;
     TextView mcustomer;
@@ -38,9 +42,11 @@ public class ShowFactorActivity extends AppActivity {
     TextView mtotalString;
     TextView mdescription;
     TextView mTable[][] = new TextView[11][6];
+    ImageButton mLogo;
     TableLayout products_table;
     RelativeLayout mfactor_original;
     private int totalCost = 0;
+    SharedPreferences sp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +59,8 @@ public class ShowFactorActivity extends AppActivity {
     private void initilize() {
         mdate = (TextView) findViewById(R.id.image_date_editText);
         mphone = (TextView) findViewById(R.id.image_phoneNo_editText);
+        mAddress = (TextView) findViewById(R.id.image_address_edittext);
+        mEconomicCode = (TextView) findViewById(R.id.image_economicCode_editText);
         mCompanyName = (TextView) findViewById(R.id.image_title);
         mfactorNo = (TextView) findViewById(R.id.image_factorNo_editText);
         mcustomer = (TextView) findViewById(R.id.image_customer_editText);
@@ -61,7 +69,8 @@ public class ShowFactorActivity extends AppActivity {
         products_table = (TableLayout) findViewById(R.id.image_factor_products_table);
         mdescription = (TextView) findViewById(R.id.image_description);
         mfactor_original = (RelativeLayout) findViewById(R.id.showfactor);
-
+        mLogo = (ImageButton) findViewById(R.id.image_main_logo);
+        sp = getSharedPreferences("", 0);
     }
 
     private void initilize_content() {
@@ -70,6 +79,8 @@ public class ShowFactorActivity extends AppActivity {
         mfactor = gson.fromJson(json, Factor.class);
         mdate.setText(mfactor.Date);
         mphone.setText(mfactor.PhoneNo);
+        mAddress.setText(mfactor.Address);
+        mEconomicCode.setText(mfactor.EconomicCode);
         mCompanyName.setText(mfactor.CompanyName);
         mfactorNo.setText(String.valueOf(mfactor.No));
         mcustomer.setText(mfactor.Customer);
@@ -77,6 +88,11 @@ public class ShowFactorActivity extends AppActivity {
         mtotal.setText(AppConstant.Int_To_Price(totalCost));
         mtotalString.setText(Persian_Number_To_String.GET_Number_To_PersianString(String.valueOf(totalCost)) + getString(R.string.currency));
         mdescription.setText(mfactor.Description);
+        try {
+            AppConstant.Set_Image(mLogo, this, mfactor.ImageDestinationNo);
+        } catch (Exception e) {
+
+        }
     }
 
     public void draw_table() {
@@ -135,7 +151,7 @@ public class ShowFactorActivity extends AppActivity {
                         if (i == 0)
                             mTable[i][j].setText(getString(R.string.main_producttotalcost));
                         else if (mfactor.Products.size() >= i) {
-                            mTable[i][j].setText(AppConstant.Int_To_Price(mfactor.Products.get(i - 1).No * mfactor.Products.get(i - 1).Fee));
+                            mTable[i][j].setText(AppConstant.Int_To_Price((int) (mfactor.Products.get(i - 1).No * mfactor.Products.get(i - 1).Fee)));
                             totalCost += mfactor.Products.get(i - 1).No * mfactor.Products.get(i - 1).Fee;
                         }
                         lp.weight = 4;

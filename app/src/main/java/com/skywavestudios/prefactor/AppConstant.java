@@ -7,10 +7,14 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Environment;
 import android.view.View;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -78,5 +82,34 @@ public class AppConstant {
             e.printStackTrace();
         }
         return s;
+    }
+
+    public static void Set_Image(ImageButton img, Activity activity, int logono){
+        Bitmap b;
+        if (logono != 0) {
+            final File dir1 = AppConstant.App_Folder_Path();
+            Integer thumbNo1 = logono;
+            String thumbUrl1 = thumbNo1.toString() + ".jpg";
+            String thumbUrl2 = thumbNo1.toString() + ".JPG";
+            String thumbUrl3 = thumbNo1.toString() + ".png";
+            String thumbUrl4 = thumbNo1.toString() + ".PNG";
+            final File imageFileName1 = new File(dir1, thumbUrl1);
+            final File imageFileName2 = new File(dir1, thumbUrl2);
+            final File imageFileName3 = new File(dir1, thumbUrl3);
+            final File imageFileName4 = new File(dir1, thumbUrl4);
+            if (imageFileName1.exists())
+                b = BitmapFactory.decodeFile(imageFileName1.getAbsolutePath());
+            else if (imageFileName2.exists())
+                b = BitmapFactory.decodeFile(imageFileName2.getAbsolutePath());
+            else if (imageFileName3.exists())
+                b = BitmapFactory.decodeFile(imageFileName3.getAbsolutePath());
+            else if (imageFileName4.exists())
+                b = BitmapFactory.decodeFile(imageFileName4.getAbsolutePath());
+            else
+                b = ((BitmapDrawable) activity.getResources().getDrawable(R.drawable.logo_sample)).getBitmap();
+        } else
+            b = ((BitmapDrawable) activity.getResources().getDrawable(R.drawable.logo_sample)).getBitmap();
+        img.setImageBitmap(b);
+        img.setScaleType(ImageView.ScaleType.FIT_START);
     }
 }

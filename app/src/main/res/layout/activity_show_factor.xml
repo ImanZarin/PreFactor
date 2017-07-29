@@ -14,34 +14,80 @@
         android:focusableInTouchMode="true">
 
         <LinearLayout
-            android:id="@+id/image_factor_header"
+            android:id="@+id/factor_header"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginEnd="@dimen/main_side_margin"
             android:layout_marginLeft="@dimen/main_side_margin"
             android:layout_marginRight="@dimen/main_side_margin"
             android:layout_marginStart="@dimen/main_side_margin"
+            android:layout_marginTop="@dimen/main_side_margin"
             android:orientation="vertical"
             android:weightSum="100"
             app:layout_heightPercent="20%">
 
-
-            <TextView
-                android:id="@+id/image_title"
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/main_normal_margin"
-                android:layout_weight="30"
-                android:text="@string/main_title"
-                android:textSize="@dimen/main_title_textsize"
-                android:textStyle="bold"/>
+                android:layout_weight="40">
+
+                <EditText
+                    android:id="@+id/image_title"
+                    style="@style/ButtonTheme"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_centerInParent="true"
+                    android:layout_marginTop="@dimen/main_normal_margin"
+                    android:text="@string/main_title"
+                    android:textSize="@dimen/main_title_textsize"
+                    android:textStyle="bold" />
+
+                <ImageButton
+                    android:id="@+id/image_main_logo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minHeight="@dimen/main_logo_min"
+                    android:minWidth="@dimen/main_logo_min"
+                    android:maxHeight="@dimen/main_logo_maxHeight"
+                    android:maxWidth="@dimen/main_logo_maxWidth"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_toLeftOf="@id/image_title"
+                    android:layout_toStartOf="@id/image_title"
+                    android:background="@color/mdtp_white"/>
+
+                <LinearLayout
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:orientation="horizontal"
+                    android:weightSum="5">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/main_normal_margin"
+                        android:layout_marginRight="@dimen/main_normal_margin"
+                        android:layout_weight="1.5"
+                        android:text="@string/main_factorno" />
+
+                    <EditText
+                        android:id="@+id/image_factorNo_editText"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3.5"
+                        android:inputType="number"
+                        android:textDirection="ltr" />
+                </LinearLayout>
+            </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_marginTop="@dimen/main_normal_margin"
-                android:layout_weight="35"
+                android:layout_weight="30"
                 android:orientation="horizontal"
                 android:weightSum="10">
 
@@ -60,15 +106,15 @@
                         android:background="@drawable/phone" />
                 </RelativeLayout>
 
-                <TextView
+                <EditText
                     android:id="@+id/image_phoneNo_editText"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="@dimen/main_normal_margin"
                     android:layout_marginStart="@dimen/main_normal_margin"
                     android:layout_weight="3.5"
-                    android:textDirection="ltr"
-                    android:theme="@style/EditTextTheme" />
+                    android:inputType="phone"
+                    android:textDirection="ltr" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -76,16 +122,15 @@
                     android:layout_marginEnd="@dimen/main_normal_margin"
                     android:layout_marginRight="@dimen/main_normal_margin"
                     android:layout_weight="1.5"
-                    android:text="@string/main_factorno" />
+                    android:text="@string/main_ecocode" />
 
-                <TextView
-                    android:id="@+id/image_factorNo_editText"
+                <EditText
+                    android:id="@+id/image_economicCode_editText"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="3.5"
                     android:inputType="number"
-                    android:textDirection="ltr"
-                    android:theme="@style/EditTextTheme" />
+                    android:textDirection="ltr" />
 
 
             </LinearLayout>
@@ -94,26 +139,25 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_marginTop="@dimen/main_normal_margin"
-                android:layout_weight="35"
+                android:layout_weight="30"
                 android:orientation="horizontal"
                 android:weightSum="10">
 
                 <TextView
-                    android:id="@+id/image_customer_title"
+                    android:id="@+id/customer_title"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1.5"
                     android:text="@string/main_customer" />
 
-                <TextView
+                <AutoCompleteTextView
                     android:id="@+id/image_customer_editText"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="@dimen/main_normal_margin"
                     android:layout_marginStart="@dimen/main_normal_margin"
                     android:layout_weight="3.5"
-                    android:completionThreshold="1"
-                    android:theme="@style/EditTextTheme" />
+                    android:completionThreshold="1" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -141,7 +185,7 @@
             android:id="@+id/image_factor_products_table"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_below="@id/image_factor_header"
+            android:layout_below="@id/factor_header"
             android:layout_marginTop="@dimen/main_normal_margin"
             android:shrinkColumns="1,5"
             android:stretchColumns="*"
@@ -161,17 +205,17 @@
             android:layout_marginRight="@dimen/main_normal_margin"
             android:layout_marginStart="@dimen/main_normal_margin"
             android:orientation="vertical"
-            app:layout_heightPercent="20%"
-            android:weightSum="10">
+            android:weightSum="10"
+            app:layout_heightPercent="20%">
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="3"
                 android:layout_marginEnd="@dimen/main_side_margin"
                 android:layout_marginLeft="@dimen/main_side_margin"
                 android:layout_marginRight="@dimen/main_side_margin"
                 android:layout_marginStart="@dimen/main_side_margin"
+                android:layout_weight="3"
                 android:orientation="horizontal">
 
                 <TextView
@@ -185,20 +229,32 @@
                     android:id="@+id/image_total_string"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_toLeftOf="@id/image_total_no"
-                    android:layout_toStartOf="@id/image_total_no" />
+                    android:layout_toLeftOf="@id/total_no"
+                    android:layout_toStartOf="@id/total_no" />
 
 
             </RelativeLayout>
 
-            <TextView
+            <EditText
                 android:id="@+id/image_description"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="7"
-                android:hint="@string/main_description"
-                android:theme="@style/EditTextTheme" />
+                android:layout_weight="3"
+                android:hint="@string/main_description" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <EditText
+                android:id="@+id/image_address_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="3"
+                android:hint="@string/main_address" />
         </LinearLayout>
+
     </android.support.percent.PercentRelativeLayout>
 
 </RelativeLayout>

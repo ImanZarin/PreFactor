@@ -21,5 +21,5 @@ public class Factor {
     public String CompanyName;
     public String EconomicCode;
     public String Address;
-    public String Image;
+    public Integer ImageDestinationNo;
 }

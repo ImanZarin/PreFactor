@@ -7,6 +7,6 @@ package com.skywavestudios.prefactor;
 public class Product {
     public String Name;
     public int Fee;
-    public int No;
+    public float No;
     public String Scale;
 }

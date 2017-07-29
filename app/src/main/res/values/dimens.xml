@@ -9,6 +9,7 @@
     <dimen name="main_small_margin">5dp</dimen>
     <dimen name="main_downbigbox_height">100dp</dimen>
     <dimen name="main_button_height">50dp</dimen>
+
     <dimen name="history_padding_normal">10dp</dimen>
     <dimen name="history_icon_height">35dp</dimen>
     <dimen name="history_row_height">70dp</dimen>

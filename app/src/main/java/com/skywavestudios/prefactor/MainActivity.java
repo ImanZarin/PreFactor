@@ -110,7 +110,8 @@ public class MainActivity extends AppActivity implements DatePickerDialog.OnDate
     private ArrayList<Integer> _All_FactorNo = new ArrayList<Integer>();
     private Activity _Activity = this;
     private ImageButton img;
-    private String logoUri;
+    private String imagedestination;
+    private Integer imagedestinationNo;
     private Bitmap _img;
     private Uri _imgUri;
 
@@ -137,6 +138,7 @@ public class MainActivity extends AppActivity implements DatePickerDialog.OnDate
                     new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                     1);
         }
+
 
     }
 
@@ -191,32 +193,7 @@ public class MainActivity extends AppActivity implements DatePickerDialog.OnDate
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, suggestion_list);
             customer.setAdapter(adapter);
         }
-        Bitmap b;
-        if (sp.getInt(SharedPrefsMainKey.LastLogoNo.toString(), 0) != 0) {
-            final File dir1 = AppConstant.App_Folder_Path();
-            Integer thumbNo1 = sp.getInt(SharedPrefsMainKey.LastLogoNo.toString(), 0);
-            String thumbUrl1 = thumbNo1.toString() + ".jpg";
-            String thumbUrl2 = thumbNo1.toString() + ".JPG";
-            String thumbUrl3 = thumbNo1.toString() + ".png";
-            String thumbUrl4 = thumbNo1.toString() + ".PNG";
-            final File imageFileName1 = new File(dir1, thumbUrl1);
-            final File imageFileName2 = new File(dir1, thumbUrl2);
-            final File imageFileName3 = new File(dir1, thumbUrl3);
-            final File imageFileName4 = new File(dir1, thumbUrl4);
-            if (imageFileName1.exists())
-                b = BitmapFactory.decodeFile(imageFileName1.getAbsolutePath());
-            else if (imageFileName2.exists())
-                b = BitmapFactory.decodeFile(imageFileName2.getAbsolutePath());
-            else if (imageFileName3.exists())
-                b = BitmapFactory.decodeFile(imageFileName3.getAbsolutePath());
-            else if (imageFileName4.exists())
-                b = BitmapFactory.decodeFile(imageFileName4.getAbsolutePath());
-            else
-                b = ((BitmapDrawable) getResources().getDrawable(R.drawable.logo_sample)).getBitmap();
-        } else
-            b = ((BitmapDrawable) getResources().getDrawable(R.drawable.logo_sample)).getBitmap();
-        img.setImageBitmap(b);
-        img.setScaleType(ImageView.ScaleType.FIT_START);
+        AppConstant.Set_Image(img, this, sp.getInt(SharedPrefsMainKey.LastLogoNo.toString(), 0));
         draw_table();
         inflater = getLayoutInflater();
         toast_layout = inflater.inflate(R.layout.toast_theme,
@@ -359,10 +336,10 @@ public class MainActivity extends AppActivity implements DatePickerDialog.OnDate
             mTable[row_number][4].setText("");
         _Fees[row_number] = p.Fee;
         if (p.No != 0 && p.Fee != 0) {
-            mTable[row_number][5].setText(AppConstant.Int_To_Price(p.Fee * p.No));
+            mTable[row_number][5].setText(AppConstant.Int_To_Price((int) (p.Fee * p.No)));
         } else
             mTable[row_number][5].setText("");
-        _Product_Cost[row_number] = p.Fee * p.No;
+        _Product_Cost[row_number] = (int) (p.Fee * p.No);
         total = 0;
         for (int i = 1; i <= 10; i++) {
             try {
@@ -417,7 +394,7 @@ public class MainActivity extends AppActivity implements DatePickerDialog.OnDate
             f.Address = address.getText().toString();
             f.EconomicCode = economicCode.getText().toString();
             f.CompanyName = mTitle.getText().toString();
-            f.Image = logoUri;
+            f.ImageDestinationNo = imagedestinationNo;
             try {
                 f.No = Integer.parseInt(factorNo.getText().toString());
                 if (f.No <= 0)
@@ -517,6 +494,12 @@ public class MainActivity extends AppActivity implements DatePickerDialog.OnDate
     }
 
     public void change_image(View v) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(MainActivity.this,
+                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                    1);
+        }
         _imgUri = null;
         CropImage.activity(_imgUri)
                 .setCropShape(CropImageView.CropShape.RECTANGLE)
@@ -587,7 +570,6 @@ public class MainActivity extends AppActivity implements DatePickerDialog.OnDate
     private void saveImage(Uri sourceuri) {
         Integer thumbNo = sp.getInt(SharedPrefsMainKey.LastLogoNo.toString(), 0) + 1;
         e.putInt(SharedPrefsMainKey.LastLogoNo.toString(), thumbNo);
-        logoUri = _imgUri.toString();
         File createDir = AppConstant.App_Folder_Path();
         /*
         OutputStream out;
@@ -606,14 +588,15 @@ public class MainActivity extends AppActivity implements DatePickerDialog.OnDate
         }
 */
         String sourceFilename = sourceuri.getPath();
-        String destinationFilename = createDir.toString() + thumbNo.toString() + logoUri.substring(logoUri.lastIndexOf("."));
+        imagedestinationNo = thumbNo;
+        imagedestination = createDir.toString() + "/" + thumbNo.toString() + _imgUri.toString().substring(_imgUri.toString().lastIndexOf("."));
 
         BufferedInputStream bis = null;
         BufferedOutputStream bos = null;
 
         try {
             bis = new BufferedInputStream(new FileInputStream(sourceFilename));
-            bos = new BufferedOutputStream(new FileOutputStream(destinationFilename, false));
+            bos = new BufferedOutputStream(new FileOutputStream(imagedestination, false));
             byte[] buf = new byte[1024];
             bis.read(buf);
             do {

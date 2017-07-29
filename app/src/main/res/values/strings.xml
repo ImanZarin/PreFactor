@@ -8,7 +8,7 @@
     <string name="main_description">توضیحات</string>
     <string name="main_address">آدرس</string>
     <string name="fillproduct_title">عنوان</string>
-    <string name="fillproduct_no">تعداد</string>
+    <string name="fillproduct_no">تعداد یا وزن یا متراژ</string>
     <string name="fillproduct_unit">واحد</string>
     <string name="fillproduct_fee">مبلغ واحد</string>
     <string name="fillproduct_totalcost">مبلغ کل</string>
@@ -20,7 +20,7 @@
     <string name="main_productfee"> مبلغ واحد</string>
     <string name="main_producttotalcost">مبلغ کل(ریال)</string>
     <string name="main_rowno">شماره</string>
-    <string name="fillproduct_errormessage">تعداد و مبلغ باید مرقوم شوند</string>
+    <string name="fillproduct_errormessage">تعداد و مبلغ باید درست مرقوم شوند</string>
     <string name="main_nohistory_error">هیچ فاکتوری ثبت نشده است</string>
     <string name="history_search_hint">نام مشتری را جستجو کنید</string>
     <string name="fillproduct_ok">تایید</string>
