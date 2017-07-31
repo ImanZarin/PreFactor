@@ -45,7 +45,7 @@ public class ShowFactorActivity extends AppActivity {
     ImageButton mLogo;
     TableLayout products_table;
     RelativeLayout mfactor_original;
-    private int totalCost = 0;
+    private long totalCost = 0;
     SharedPreferences sp;
 
     @Override
@@ -129,8 +129,14 @@ public class ShowFactorActivity extends AppActivity {
                     case 2:
                         if (i == 0)
                             mTable[i][j].setText(getString(R.string.main_productno));
-                        else if (mfactor.Products.size() >= i)
-                            mTable[i][j].setText(String.valueOf(mfactor.Products.get(i - 1).No));
+                        else if (mfactor.Products.size() >= i) {
+                            if (mfactor.Products.get(i - 1).No != 0) {
+                                if (mfactor.Products.get(i - 1).No % 1 == 0)
+                                    mTable[i][j].setText(String.valueOf((int) (mfactor.Products.get(i - 1).No)));
+                                else
+                                    mTable[i][j].setText(String.valueOf(mfactor.Products.get(i - 1).No));
+                            }
+                        }
                         lp.weight = 2;
                         break;
                     case 3:
@@ -151,8 +157,8 @@ public class ShowFactorActivity extends AppActivity {
                         if (i == 0)
                             mTable[i][j].setText(getString(R.string.main_producttotalcost));
                         else if (mfactor.Products.size() >= i) {
-                            mTable[i][j].setText(AppConstant.Int_To_Price((int) (mfactor.Products.get(i - 1).No * mfactor.Products.get(i - 1).Fee)));
-                            totalCost += mfactor.Products.get(i - 1).No * mfactor.Products.get(i - 1).Fee;
+                            mTable[i][j].setText(AppConstant.Int_To_Price(Math.round(mfactor.Products.get(i - 1).No * mfactor.Products.get(i - 1).Fee)));
+                            totalCost += Math.round(mfactor.Products.get(i - 1).No * mfactor.Products.get(i - 1).Fee);
                         }
                         lp.weight = 4;
                         break;

@@ -68,6 +68,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.math.BigInteger;
 import java.sql.SQLData;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -99,13 +100,13 @@ public class MainActivity extends AppActivity implements DatePickerDialog.OnDate
     RelativeLayout factor_original;
     TextView mTable[][] = new TextView[11][6];
     EditText description;
-    private int total = 0;
+    private long total = 0;
     LayoutInflater inflater;
     public View toast_layout;
     private SQLiteDatabase mDB;
     private FactorDBHelper _dbHelper;
     private Cursor _Cursor;
-    private int _Fees[] = new int[11];
+    private Long _Fees[] = new Long[11];
     private int _Product_Cost[] = new int[11];
     private ArrayList<Integer> _All_FactorNo = new ArrayList<Integer>();
     private Activity _Activity = this;
@@ -194,6 +195,7 @@ public class MainActivity extends AppActivity implements DatePickerDialog.OnDate
             customer.setAdapter(adapter);
         }
         AppConstant.Set_Image(img, this, sp.getInt(SharedPrefsMainKey.LastLogoNo.toString(), 0));
+        imagedestinationNo = sp.getInt(SharedPrefsMainKey.LastLogoNo.toString(), 0);
         draw_table();
         inflater = getLayoutInflater();
         toast_layout = inflater.inflate(R.layout.toast_theme,
@@ -325,9 +327,12 @@ public class MainActivity extends AppActivity implements DatePickerDialog.OnDate
 
     public void edit_product(Product p, int row_number) {
         mTable[row_number][1].setText(p.Name);
-        if (p.No != 0)
-            mTable[row_number][2].setText(String.valueOf(p.No));
-        else
+        if (p.No != 0) {
+            if (p.No % 1 == 0)
+                mTable[row_number][2].setText(String.valueOf((int) (p.No)));
+            else
+                mTable[row_number][2].setText(String.valueOf(p.No));
+        } else
             mTable[row_number][2].setText("");
         mTable[row_number][3].setText(p.Scale);
         if (p.Fee != 0) {
@@ -336,10 +341,10 @@ public class MainActivity extends AppActivity implements DatePickerDialog.OnDate
             mTable[row_number][4].setText("");
         _Fees[row_number] = p.Fee;
         if (p.No != 0 && p.Fee != 0) {
-            mTable[row_number][5].setText(AppConstant.Int_To_Price((int) (p.Fee * p.No)));
+            mTable[row_number][5].setText(AppConstant.Int_To_Price(((Float)((float)Math.round((p.Fee * p.No)))).longValue()));
         } else
             mTable[row_number][5].setText("");
-        _Product_Cost[row_number] = (int) (p.Fee * p.No);
+        _Product_Cost[row_number] = Math.round(p.Fee * p.No);
         total = 0;
         for (int i = 1; i <= 10; i++) {
             try {
@@ -358,7 +363,6 @@ public class MainActivity extends AppActivity implements DatePickerDialog.OnDate
         date_view.setText(date);
     }
 
-
     public void show_product_popup(View v, int row_no) {
         FragmentManager fm = getSupportFragmentManager();
         FillProduct_Fragment editNameDialogFragment = FillProduct_Fragment.newInstance("Some Title");
@@ -374,7 +378,7 @@ public class MainActivity extends AppActivity implements DatePickerDialog.OnDate
             Product p = new Product();
             p.Name = mTable[i][1].getText().toString();
             try {
-                p.No = Integer.valueOf(mTable[i][2].getText().toString());
+                p.No = Float.valueOf(mTable[i][2].getText().toString());
                 p.Fee = _Fees[i];
             } catch (Exception e) {
                 e.printStackTrace();

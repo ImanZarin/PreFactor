@@ -1,9 +1,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/showfactor"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/showfactor"
     android:background="@color/background"
     tools:context="com.skywavestudios.prefactor.ShowFactorActivity">
 
@@ -46,22 +46,22 @@
                     android:id="@+id/image_main_logo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:minHeight="@dimen/main_logo_min"
-                    android:minWidth="@dimen/main_logo_min"
-                    android:maxHeight="@dimen/main_logo_maxHeight"
-                    android:maxWidth="@dimen/main_logo_maxWidth"
                     android:layout_marginLeft="10dp"
                     android:layout_marginStart="10dp"
                     android:layout_toLeftOf="@id/image_title"
                     android:layout_toStartOf="@id/image_title"
-                    android:background="@color/mdtp_white"/>
+                    android:background="@color/mdtp_white"
+                    android:maxHeight="@dimen/main_logo_maxHeight"
+                    android:maxWidth="@dimen/main_logo_maxWidth"
+                    android:minHeight="@dimen/main_logo_min"
+                    android:minWidth="@dimen/main_logo_min" />
 
                 <LinearLayout
                     android:layout_width="150dp"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
                     android:orientation="horizontal"
                     android:weightSum="5">
 
@@ -70,14 +70,14 @@
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="@dimen/main_normal_margin"
                         android:layout_marginRight="@dimen/main_normal_margin"
-                        android:layout_weight="1.5"
+                        android:layout_weight="2"
                         android:text="@string/main_factorno" />
 
                     <EditText
                         android:id="@+id/image_factorNo_editText"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="3.5"
+                        android:layout_weight="3"
                         android:inputType="number"
                         android:textDirection="ltr" />
                 </LinearLayout>
@@ -229,8 +229,8 @@
                     android:id="@+id/image_total_string"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_toLeftOf="@id/total_no"
-                    android:layout_toStartOf="@id/total_no" />
+                    android:layout_toLeftOf="@id/image_total_no"
+                    android:layout_toStartOf="@id/image_total_no" />
 
 
             </RelativeLayout>

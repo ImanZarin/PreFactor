@@ -147,7 +147,7 @@ public class HistoryActivity extends AppActivity implements History_Adaptor.RowC
                 new String[]{customerName + "%"},
                 null,
                 null,
-                FactorsContract.FactorsEntry.COLUMN_DATE + " DESC"
+                FactorsContract.FactorsEntry.COLUMN_DATE + " DESC," + FactorsContract.FactorsEntry.COLUMN_FACTORNO + " DESC"
         );
     }
 

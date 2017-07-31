@@ -15,7 +15,7 @@
     <string name="main_totalsum">مبلغ کل:</string>
     <string name="main_totaltostring">به حروف:</string>
     <string name="main_producttitle">عنوان</string>
-    <string name="main_productno">تعداد</string>
+    <string name="main_productno">مقدار</string>
     <string name="main_productunit">واحد</string>
     <string name="main_productfee"> مبلغ واحد</string>
     <string name="main_producttotalcost">مبلغ کل(ریال)</string>

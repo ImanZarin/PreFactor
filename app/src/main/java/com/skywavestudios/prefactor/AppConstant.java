@@ -20,6 +20,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.math.BigInteger;
 import java.text.DecimalFormat;
 
 /**
@@ -31,7 +32,7 @@ public class AppConstant {
     public static final int GET_FROM_GALLERY = 3;
     public static Context AppContext;
 
-    public static String Int_To_Price(int i) {
+    public static String Int_To_Price(long i) {
         DecimalFormat formatter = new DecimalFormat("###,###,###,###,###");
         String yourFormattedString = formatter.format(i);
         return yourFormattedString;
@@ -45,7 +46,7 @@ public class AppConstant {
                 null,
                 null,
                 null,
-                FactorsContract.FactorsEntry.COLUMN_DATE + " DESC"
+                FactorsContract.FactorsEntry.COLUMN_DATE + " DESC," + FactorsContract.FactorsEntry.COLUMN_FACTORNO + " DESC"
         );
 
     }
@@ -84,7 +85,7 @@ public class AppConstant {
         return s;
     }
 
-    public static void Set_Image(ImageButton img, Activity activity, int logono){
+    public static void Set_Image(ImageButton img, Activity activity, int logono) {
         Bitmap b;
         if (logono != 0) {
             final File dir1 = AppConstant.App_Folder_Path();

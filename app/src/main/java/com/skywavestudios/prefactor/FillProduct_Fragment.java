@@ -19,6 +19,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -81,8 +82,8 @@ public class FillProduct_Fragment extends DialogFragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.toString().contains(".") && s.subSequence(s.toString().lastIndexOf("."), s.length()).length() > 2) {
-                    if (s.subSequence(s.toString().lastIndexOf("."), s.length()).length() > 3)
+                if (s.toString().contains(".") && s.subSequence(s.toString().lastIndexOf("."), s.length()).length() > 3) {
+                    if (s.subSequence(s.toString().lastIndexOf("."), s.length()).length() > 4)
                         no.setText(s.subSequence(0, s.length() - 1));
                     unit.requestFocus();
                 }
@@ -155,7 +156,7 @@ public class FillProduct_Fragment extends DialogFragment {
         Product new_product = new Product();
         new_product.Name = "";
         new_product.Scale = "";
-        new_product.Fee = 0;
+        new_product.Fee = Long.valueOf(0);
         new_product.No = 0;
         ((MainActivity) getActivity()).edit_product(new_product, RowNO);
         this.dismiss();
@@ -167,7 +168,7 @@ public class FillProduct_Fragment extends DialogFragment {
         new_product.Name = name.getText().toString();
         new_product.Scale = unit.getText().toString();
         try {
-            new_product.Fee = Integer.valueOf(fee.getText().toString());
+            new_product.Fee = Long.parseLong((fee.getText().toString()));
             new_product.No = Float.parseFloat(no.getText().toString());
             ((MainActivity) getActivity()).edit_product(new_product, RowNO);
             this.dismiss();
@@ -194,7 +195,8 @@ public class FillProduct_Fragment extends DialogFragment {
 
     private void _Total_Change_Listener() {
         String _totalcost = getString(R.string.fillproduct_totalcost) + "  ";
-        _totalcost += AppConstant.Int_To_Price(Integer.valueOf(no.getText().toString()) * Integer.valueOf(fee.getText().toString()));
+        Float f = Float.parseFloat(no.getText().toString()) * Long.parseLong(fee.getText().toString());
+        _totalcost += AppConstant.Int_To_Price(f.longValue());
         total_cost.setText(_totalcost);
     }
 }
